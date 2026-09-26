@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prado Moncherri Doceria | Doces, Bolos e Sobremesas</title>
+<meta name="description" content="Prado Moncherri Doceria — bolos, brownies, morangos, doces e sobremesas artesanais. Monte seu pedido e finalize pelo WhatsApp.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#inicio" class="brand">
+      <img src="assets/logo/logo.jpg" alt="Prado Moncherri Doceria">
+      <span>Prado Moncherri</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#inicio">Início</a></li>
+      <li><a href="#cardapio">Cardápio</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="icon-btn" id="cartIconBtn" aria-label="Ver pedido">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.7 12.4a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6"/></svg>
+        <span class="badge hidden" id="cartBadge">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="inicio">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">Doceria artesanal</p>
+        <h1>Doces feitos à mão,<br>pedidos em minutos.</h1>
+        <p class="lede">Morangos cravejados, brownies recheados, cakes no pote e bolos por encomenda — monte seu pedido aqui e finalize direto no WhatsApp da loja.</p>
+        <div class="hero-actions">
+          <a href="#cardapio" class="btn btn-primary">Ver cardápio</a>
+          <a href="#destaques" class="btn btn-ghost">Os queridinhos</a>
+        </div>
+      </div>
+      <div class="hero-mark">
+        <div class="hero-mark-ring">
+          <img src="assets/logo/logo.jpg" alt="">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="destaques">
+    <div class="wrap section-head">
+      <div>
+        <p class="eyebrow">Mais pedidos</p>
+        <h2>Nossos queridinhos</h2>
+      </div>
+    </div>
+    <div class="scroller" id="featScroller"></div>
+  </section>
+
+  <section id="cardapio">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Cardápio completo</p>
+          <h2>Escolha e monte seu pedido</h2>
+        </div>
+      </div>
+      <div class="pills" id="pillBar"></div>
+      <div class="grid" id="productGrid"></div>
+    </div>
+  </section>
+
+  <section id="sobre">
+    <div class="wrap sobre-grid">
+      <div class="about-ring">
+        <div class="inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21c-4-2.7-8-6-8-10.5A5 5 0 0 1 12 7a5 5 0 0 1 8 3.5C20 15 16 18.3 12 21Z"/></svg>
+        </div>
+      </div>
+      <div>
+        <p class="eyebrow">Sobre nós</p>
+        <h2>Carinho que dá pra sentir no primeiro pedaço</h2>
+        <p style="margin-top:14px;">Cada doce da Prado Moncherri é preparado em pequenos lotes, com atenção aos detalhes — do recheio ao acabamento. Aqui, cada encomenda é tratada como se fosse a única do dia.</p>
+        <div class="note">📝 Texto de exemplo. Assim que a proprietária responder ao briefing (história, ano de início, diferencial, produto-carro-chefe), substituímos por informações reais.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contato">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Fale com a gente</p>
+          <h2>Pedidos, retirada e entrega</h2>
+        </div>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.5 17.5c0 1-1.6 2.5-3.2 2.5C11 20 4 13 4 6.7 4 5.1 5.5 3.5 6.5 3.5c.4 0 .7.2.9.6l1.7 3.3c.2.4.1.9-.2 1.2L7.6 10c1 2.4 2.9 4.3 5.3 5.3l1.4-1.3c.3-.3.8-.4 1.2-.2l3.3 1.7c.4.2.6.5.7.9v1.1Z"/></svg>
+          <h3>WhatsApp</h3>
+          <p style="margin-bottom:12px;">Fale direto conosco para tirar dúvidas ou acompanhar seu pedido.</p>
+          <a class="btn btn-gold" id="contactWhatsApp" href="#" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+        </div>
+        <div class="contact-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.3 7-11.5A7 7 0 0 0 5 9.5C5 14.7 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.4"/></svg>
+          <h3>Endereço</h3>
+          <p>Retirada e área de entrega a confirmar com a proprietária.</p>
+        </div>
+        <div class="contact-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></svg>
+          <h3>Horário</h3>
+          <p>Dias e horários de funcionamento a confirmar com a proprietária.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="#inicio" class="brand"><span>Prado Moncherri Doceria</span></a>
+    <p>Fotos, preços, endereço e horários pendentes de confirmação com a proprietária.</p>
+  </div>
+</footer>
+
+<!-- Barra flutuante do carrinho -->
+<button class="cart-fab" id="cartFab">
+  <span class="left"><span class="count" id="fabCount">0</span> ver pedido</span>
+  <span class="total" id="fabTotal">R$ 0,00</span>
+</button>
+
+<!-- Gaveta do carrinho -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3>Seu pedido</h3>
+    <button class="close-x" id="closeDrawer" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot" style="display:none;">
+    <div class="row-total"><span>Total</span><strong id="drawerTotal">R$ 0,00</strong></div>
+    <button class="btn btn-primary btn-block" id="checkoutBtn">Finalizar pedido</button>
+  </div>
+</aside>
+
+<!-- Modal de finalização -->
+<div class="modal" id="checkoutModal">
+  <div class="modal-card">
+    <div class="drawer-head" style="padding:0 0 14px;">
+      <h3>Finalizar pedido</h3>
+      <button class="close-x" id="closeModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="field">
+      <label for="custName">Seu nome</label>
+      <input id="custName" type="text" placeholder="Como podemos te chamar?">
+    </div>
+    <div class="field">
+      <label>Forma de recebimento</label>
+      <div class="radio-row">
+        <div class="radio-opt active" data-value="retirada">Retirada</div>
+        <div class="radio-opt" data-value="entrega">Entrega</div>
+      </div>
+    </div>
+    <div id="deliveryFields" class="hidden">
+      <div class="field"><label for="custAddress">Endereço</label><input id="custAddress" type="text" placeholder="Rua, avenida..."></div>
+      <div class="field"><label for="custNumber">Número</label><input id="custNumber" type="text" placeholder="Nº"></div>
+      <div class="field"><label for="custHood">Bairro</label><input id="custHood" type="text" placeholder="Bairro"></div>
+    </div>
+    <div class="field">
+      <label for="custNotes">Observação</label>
+      <textarea id="custNotes" placeholder="Horário de retirada, alguma preferência..."></textarea>
+    </div>
+    <div class="row-total" style="margin-bottom:14px;"><span>Total do pedido</span><strong id="modalTotal">R$ 0,00</strong></div>
+    <button class="btn btn-gold btn-block" id="sendWhatsApp">Enviar pedido pelo WhatsApp</button>
+  </div>
+</div>
+
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/whatsapp.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

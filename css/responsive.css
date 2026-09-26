@@ -1,0 +1,43 @@
+/* responsive.css — mobile-first: style.css e components.css já trazem o
+   layout de celular. Aqui só ficam os ajustes para telas maiores. */
+
+/* ---- Tablet (>= 640px) ---- */
+@media (min-width:640px){
+  .grid{ grid-template-columns:repeat(3,1fr); gap:20px; }
+  .modal{ align-items:center; }
+  .modal-card{ border-radius:22px; }
+}
+
+/* ---- Tablet grande / notebook pequeno (>= 760px) ---- */
+@media (min-width:760px){
+  .contact-grid{ grid-template-columns:repeat(3,1fr); }
+}
+
+/* ---- Desktop (>= 860px) ---- */
+@media (min-width:860px){
+  .nav-links{ display:flex; }
+  footer{ padding-bottom:44px; }
+}
+
+/* ---- Desktop largo (>= 900px) ---- */
+@media (min-width:900px){
+  h1{ font-size:52px; }
+  h2{ font-size:34px; }
+
+  .hero-inner{ grid-template-columns:1.1fr .9fr; gap:56px; }
+  .hero-copy{ text-align:left; }
+  .hero-copy p.lede{ margin-left:0; margin-right:0; }
+  .hero-actions{ justify-content:flex-start; }
+  /* espelha a ordem: copy à esquerda, marca à direita, sem mudar a ordem no HTML/DOM */
+  .hero-inner{ direction:rtl; }
+  .hero-copy, .hero-mark{ direction:ltr; }
+
+  .sobre-grid{ grid-template-columns:1fr 1fr; align-items:center; }
+}
+
+/* ---- Desktop grande (>= 980px) ---- */
+@media (min-width:980px){
+  .grid{ grid-template-columns:repeat(4,1fr); }
+  h1{ font-size:58px; }
+  h2{ font-size:38px; }
+}
