@@ -17,11 +17,15 @@ PM.Menu = (function () {
     els.featScroller = document.getElementById("featScroller");
   }
 
-  /** Placeholder visual do produto (ícone + moldura em anel) até termos fotos reais.
-   *  Quando a Fase 3 chegar, troque o innerHTML por: '<img src="assets/produtos/'+slug+'.jpg" alt="'+nome+'">'
+  /** Placeholder visual do produto (ícone + moldura em anel) até termos foto real.
+   *  Se o produto tiver "image" preenchido em products.js, mostra a foto de
+   *  verdade em vez do ícone — e a etiqueta "foto em breve" some sozinha.
    */
-  function photoHTML(cat, small) {
-    var icon = PM.ICONS[cat] || PM.ICONS.outros;
+  function photoHTML(product, small) {
+    if (product.image) {
+      return '<div class="photo photo-real"><img src="' + product.image + '" alt="' + product.name + '" loading="lazy"></div>';
+    }
+    var icon = PM.ICONS[product.cat] || PM.ICONS.outros;
     var tag = small ? "" : '<span class="tag">foto em breve</span>';
     return '<div class="photo"><div class="ring"></div>' + icon + tag + "</div>";
   }
@@ -52,7 +56,7 @@ PM.Menu = (function () {
   function cardHTML(p) {
     return (
       '<div class="card" data-id="' + p.id + '">' +
-      photoHTML(p.cat) +
+      photoHTML(p) +
       "<h3>" + p.name + "</h3>" +
       '<p class="desc">' + p.desc + "</p>" +
       '<div class="card-bottom">' + priceHTML(p) + "</div>" +
@@ -64,7 +68,7 @@ PM.Menu = (function () {
   function featCardHTML(p) {
     return (
       '<div class="feat-card" data-id="' + p.id + '">' +
-      photoHTML(p.cat, true) +
+      photoHTML(p, true) +
       "<h3>" + p.name + "</h3>" +
       '<div class="feat-price">' + (p.price != null ? PM.formatBRL(p.price) : "Sob consulta") + "</div>" +
       controlsHTML(p) +

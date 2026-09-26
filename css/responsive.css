@@ -9,8 +9,11 @@
 }
 
 /* ---- Tablet grande / notebook pequeno (>= 760px) ---- */
-@media (min-width:760px){
-  .contact-grid{ grid-template-columns:repeat(3,1fr); }
+@media (min-width:560px){
+  .contact-grid{ grid-template-columns:repeat(2,1fr); }
+}
+@media (min-width:980px){
+  .contact-grid{ grid-template-columns:repeat(4,1fr); }
 }
 
 /* ---- Desktop (>= 860px) ---- */

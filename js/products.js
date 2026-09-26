@@ -6,8 +6,13 @@
  * IMPORTANTE (Fase 3 — Conteúdo real):
  * - Preços vieram do catálogo do WhatsApp e precisam ser confirmados com a proprietária.
  * - "price: null" = produto sob consulta (sem preço fixo). A UI mostra "Perguntar no WhatsApp".
- * - Quando houver fotos oficiais, é só trocar o placeholder de ícone por <img src="assets/produtos/...">
- *   dentro de menu.js (função photoHTML), sem mexer nos dados aqui.
+ * - Fotos: cada produto aceita um campo opcional "image". Coloque o arquivo em
+ *   assets/produtos/ e aponte o caminho, por exemplo:
+ *     { id: 1, name: "Morango Cravejado", cat: "morangos", price: 16,
+ *       desc: "...", featured: true, image: "assets/produtos/morango-cravejado.jpg" }
+ *   Assim que o campo "image" existir, a foto real aparece automaticamente no
+ *   lugar do ícone e a etiqueta "foto em breve" some sozinha — não precisa
+ *   mexer em mais nada.
  */
 
 window.PM = window.PM || {};

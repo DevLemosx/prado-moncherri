@@ -42,18 +42,28 @@ prado-moncherri/
 
 ## Antes de publicar (Fase 3 e 4 do plano)
 
-1. **Número do WhatsApp**: em `js/whatsapp.js`, troque a constante `NUMBER`
-   pelo número real da loja (formato `55DDDNNNNNNNNN`, só dígitos).
-2. **Fotos**: coloque as fotos oficiais em `assets/produtos/` e troque o
-   placeholder de ícone pela tag `<img>` dentro da função `photoHTML` em
-   `js/menu.js` (tem um comentário indicando exatamente onde).
-3. **Preços e descrições**: revise o array `PM.PRODUCTS` em `js/products.js`
+Já confirmados com a proprietária:
+
+- [x] **WhatsApp**: `js/whatsapp.js` já usa o número real (+55 91 8605-6549).
+- [x] **Endereço**: R. José Ferreira da Cunha, Paragominas - PA, 68626-701 —
+      já está na seção "Contato" do `index.html`.
+- [x] **Horário**: já está na seção "Contato", agrupado por dias com o
+      mesmo funcionamento.
+- [x] **Instagram**: card novo em "Contato" linkando para
+      instagram.com/pradomoncheri.
+
+Ainda pendentes:
+
+1. **Fotos**: assim que a proprietária mandar, coloque o arquivo em
+   `assets/produtos/` e preencha o campo `image` do produto correspondente em
+   `js/products.js` (tem um exemplo comentado no topo do arquivo). A etiqueta
+   "foto em breve" some sozinha assim que o campo existir — não precisa mexer
+   em mais nada.
+2. **Preços e descrições**: revisar o array `PM.PRODUCTS` em `js/products.js`
    com a proprietária.
-4. **Endereço, horário, Instagram**: hoje estão como texto de espera na
-   seção "Contato" do `index.html` — troque pelos dados reais.
-5. **Testar**: abrir no iPhone e no Android antes de publicar, e simular um
+3. **Testar**: abrir no iPhone e no Android antes de publicar, e simular um
    pedido completo até o WhatsApp abrir com a mensagem certa.
-6. **Publicar**: como é só HTML/CSS/JS estático, dá pra subir direto na
+4. **Publicar**: como é só HTML/CSS/JS estático, dá pra subir direto na
    Netlify (arrastar a pasta no painel, ou conectar um repositório Git).
 
 ## Fase 5 (evolução futura)

@@ -8,9 +8,8 @@
  */
 
 PM.WhatsApp = (function () {
-  // TODO (Fase 3): substituir pelo número real da loja.
-  // Formato: 55 + DDD + número, só dígitos (ex: 55919999999).
-  var NUMBER = "5591987446257";
+  // Número real da loja: +55 91 8605-6549
+  var NUMBER = "559186056549";
 
   var deliveryType = "retirada";
   var els = {};

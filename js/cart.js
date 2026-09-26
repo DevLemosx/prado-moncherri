@@ -127,7 +127,7 @@ PM.Cart = (function () {
     var p = row.product;
     return (
       '<div class="cart-item" data-id="' + p.id + '">' +
-      PM.Menu.photoHTML(p.cat, true) +
+      PM.Menu.photoHTML(p, true) +
       '<div class="meta">' +
       "<h4>" + p.name + "</h4>" +
       "<small>" + PM.formatBRL(p.price) + " cada</small>" +
