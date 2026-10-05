@@ -103,7 +103,7 @@
 .contact-card svg{ width:22px; height:22px; color:var(--accent); margin-bottom:12px; }
 .contact-card h3{ font-size:17px; margin-bottom:6px; }
 .hours-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; }
-.hours-list li{ display:flex; justify-content:space-between; gap:10px; font-size:14px; color:var(--text-soft); }
+.hours-list li{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 10px; font-size:14px; color:var(--text-soft); }
 .hours-list li span:last-child{ color:var(--text); font-weight:500; white-space:nowrap; }
 
 /* ---------- Barra flutuante do carrinho ---------- */

@@ -40,6 +40,23 @@ prado-moncherri/
 └── README.md
 ```
 
+## SEO e ícones (Fase 4)
+
+Já feito em `index.html`:
+
+- Favicon e ícone de tela inicial (`assets/logo/favicon.png` e `apple-touch-icon.png`,
+  gerados a partir do logo).
+- `theme-color`, Open Graph e Twitter Card (título, descrição, imagem).
+- Dados estruturados (JSON-LD) do tipo `Bakery`, já com endereço, telefone,
+  horário de funcionamento e Instagram reais.
+
+Pendente até você ter o link final da Netlify/domínio:
+
+- Descomentar e preencher a tag `<link rel="canonical">` no `<head>`.
+- Trocar `og:image` de um caminho relativo para a URL completa
+  (ex: `https://seudominio.com/assets/logo/apple-touch-icon.png`), senão o
+  WhatsApp/Instagram não conseguem carregar a imagem ao compartilhar o link.
+
 ## Antes de publicar (Fase 3 e 4 do plano)
 
 Já confirmados com a proprietária:
