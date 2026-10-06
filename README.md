@@ -40,6 +40,26 @@ prado-moncherri/
 └── README.md
 ```
 
+## Banco de dados (Fase 5 — passo 2)
+
+O cardápio não é mais um array fixo em `products.js` — agora vem do Supabase
+(projeto `prado-moncherri`, tabelas `categories` e `products`).
+
+- `js/config.js` guarda a URL do projeto e a chave publicável. Essa chave é
+  pública por design (fica protegida pelas políticas de RLS no banco, não
+  por ser secreta) — pode ficar no repositório sem problema.
+- `js/products.js` tem a função `PM.loadCatalog()`, que busca os dados e
+  preenche `PM.CATEGORIES`/`PM.PRODUCTS` no mesmo formato de sempre — por
+  isso `cart.js`, `menu.js` e `whatsapp.js` não precisaram mudar.
+- `index.html` carrega o SDK do Supabase via CDN antes do `products.js`.
+- `app.js` agora é assíncrono: mostra "Carregando cardápio…" enquanto busca,
+  e uma mensagem de erro se a conexão falhar.
+- Só produtos com `available = true` aparecem no site — é o campo que o
+  futuro painel administrativo vai usar pra "esgotar" um produto.
+
+Pra editar produto/preço/estoque por enquanto (antes do painel existir), dá
+pra mexer direto na tabela `products` pelo editor do Supabase.
+
 ## SEO e ícones (Fase 4)
 
 Já feito em `index.html`:

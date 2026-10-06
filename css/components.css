@@ -80,6 +80,11 @@
 .card h3{ font-size:16.5px; }
 .card .desc{ font-size:13.5px; min-height:34px; }
 .card-bottom{ display:flex; align-items:center; justify-content:space-between; margin-top:auto; gap:10px; }
+
+.menu-loading, .menu-error{
+  grid-column:1 / -1; text-align:center; padding:40px 20px; color:var(--text-soft); font-size:14.5px;
+}
+.menu-error{ color:var(--accent); }
 .price{ font-family:var(--serif); font-weight:600; font-size:19px; color:var(--accent); }
 .price.query{ font-size:14px; font-family:var(--sans); color:var(--text-soft); }
 
