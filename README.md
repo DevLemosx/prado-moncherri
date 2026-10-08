@@ -60,6 +60,24 @@ O cardápio não é mais um array fixo em `products.js` — agora vem do Supabas
 Pra editar produto/preço/estoque por enquanto (antes do painel existir), dá
 pra mexer direto na tabela `products` pelo editor do Supabase.
 
+## Histórico de pedidos (Fase 5 — passo 3)
+
+Fechar o pedido agora faz duas coisas, nessa ordem:
+
+1. Grava o pedido em `orders` + `order_items` no Supabase
+2. Abre o WhatsApp com a mensagem formatada — **sempre**, mesmo se o passo 1
+   falhar (ex: sem internet no exato momento). O cliente nunca fica travado
+   por causa do histórico; o erro só vai pro console do navegador.
+
+Detalhe técnico que vale registrar: o `id` do pedido é gerado no navegador
+(`crypto.randomUUID()`) em vez de pedir pro banco gerar e devolver. Isso
+porque o visitante anônimo só tem permissão pra *criar* pedidos, não pra
+*ler* — e pedir o `id` de volta (`INSERT ... RETURNING`) esbarra nessa
+mesma regra de segurança. Gerando no navegador, a gente já sabe o `id` sem
+precisar ler nada de volta.
+
+Depois de enviar, o carrinho e o formulário são limpos automaticamente.
+
 ## SEO e ícones (Fase 4)
 
 Já feito em `index.html`:

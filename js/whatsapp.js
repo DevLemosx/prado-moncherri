@@ -1,10 +1,12 @@
 /**
  * whatsapp.js
- * Formulário de finalização de pedido + montagem da mensagem enviada ao
- * WhatsApp da loja. Não guarda dados de produto nem de carrinho — só lê
- * PM.Cart.items()/total() na hora de montar a mensagem.
+ * Formulário de finalização de pedido + mensagem para o WhatsApp da loja.
  *
- * Ordem de implementação (conforme o checklist da Fase 2): Formulário -> Gerar mensagem WhatsApp
+ * Desde a Fase 5 (passo 3), fechar o pedido faz DUAS coisas, nessa ordem:
+ *   1. Grava o pedido em orders/order_items no Supabase (histórico de pedidos)
+ *   2. Abre o WhatsApp com a mensagem formatada — SEMPRE, mesmo se o passo 1
+ *      falhar por algum motivo (rede, etc.), porque o cliente não pode ficar
+ *      sem conseguir mandar o pedido só porque o registro histórico falhou.
  */
 
 PM.WhatsApp = (function () {
@@ -12,6 +14,7 @@ PM.WhatsApp = (function () {
   var NUMBER = "559186056549";
 
   var deliveryType = "retirada";
+  var sending = false;
   var els = {};
 
   function cacheEls() {
@@ -61,8 +64,17 @@ PM.WhatsApp = (function () {
     els.deliveryFields.classList.toggle("hidden", type !== "entrega");
   }
 
+  function resetForm() {
+    els.name.value = "";
+    els.notes.value = "";
+    els.address.value = "";
+    els.number.value = "";
+    els.hood.value = "";
+    selectDelivery("retirada");
+  }
+
   // ---- Gerar mensagem WhatsApp ----
-  function buildOrderMessage() {
+  function buildOrderMessage(name) {
     var lines = [];
     lines.push("Olá! Gostaria de fazer um pedido na Prado Moncherri 🍰", "");
     lines.push("*Pedido:*");
@@ -72,7 +84,7 @@ PM.WhatsApp = (function () {
     });
 
     lines.push("", "*Total: " + PM.formatBRL(PM.Cart.total()) + "*", "");
-    lines.push("Nome: " + els.name.value.trim());
+    lines.push("Nome: " + name);
     lines.push("Forma de recebimento: " + (deliveryType === "entrega" ? "Entrega" : "Retirada"));
 
     if (deliveryType === "entrega") {
@@ -90,12 +102,84 @@ PM.WhatsApp = (function () {
     return lines.join("\n");
   }
 
+  /** UUID gerado no navegador — assim já sabemos o id do pedido sem precisar
+   *  pedir ele de volta ao banco (que o visitante anônimo não tem permissão
+   *  pra ler, só pra criar). */
+  function generateOrderId() {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") {
+      return window.crypto.randomUUID();
+    }
+    // Navegador muito antigo sem crypto.randomUUID: gera um v4 "na mão".
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+      var r = (Math.random() * 16) | 0;
+      var v = c === "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  }
+
+  /** Grava o pedido e seus itens no Supabase (histórico de pedidos). */
+  async function saveOrder(orderId, name, notes) {
+    if (!PM.client) return; // defensivo: loadCatalog deveria sempre ter criado isso
+
+    var orderRow = {
+      id: orderId,
+      customer_name: name,
+      delivery_type: deliveryType,
+      address: deliveryType === "entrega" ? els.address.value.trim() || null : null,
+      address_number: deliveryType === "entrega" ? els.number.value.trim() || null : null,
+      neighborhood: deliveryType === "entrega" ? els.hood.value.trim() || null : null,
+      notes: notes || null,
+      total: Number(PM.Cart.total())
+    };
+
+    var orderResult = await PM.client.from("orders").insert(orderRow);
+    if (orderResult.error) throw orderResult.error;
+
+    var itemRows = PM.Cart.items().map(function (row) {
+      return {
+        order_id: orderId,
+        product_id: row.product.id,
+        product_name: row.product.name,
+        unit_price: Number(row.product.price),
+        quantity: row.qty,
+        subtotal: Number(row.subtotal)
+      };
+    });
+
+    var itemsResult = await PM.client.from("order_items").insert(itemRows);
+    if (itemsResult.error) throw itemsResult.error;
+  }
+
   function handleSend() {
-    if (!els.name.value.trim()) {
+    var name = els.name.value.trim();
+    if (!name) {
       els.name.focus();
       return;
     }
-    openLink(buildOrderMessage());
+    if (sending) return; // evita duplo clique = pedido duplicado
+
+    sending = true;
+    els.sendBtn.disabled = true;
+    els.sendBtn.textContent = "Enviando...";
+
+    var orderId = generateOrderId();
+    var notes = els.notes.value.trim();
+    var message = buildOrderMessage(name); // monta ANTES de limpar o carrinho
+
+    saveOrder(orderId, name, notes)
+      .catch(function (err) {
+        // Não trava o cliente: o WhatsApp abre mesmo se o histórico falhar.
+        console.error("Não foi possível salvar o pedido no histórico (o WhatsApp abre normalmente):", err);
+      })
+      .then(function () {
+        openLink(message);
+        PM.Cart.clear();
+        closeCheckout();
+        resetForm();
+        sending = false;
+        els.sendBtn.disabled = false;
+        els.sendBtn.textContent = "Enviar pedido pelo WhatsApp";
+      });
   }
 
   function bindUI() {
