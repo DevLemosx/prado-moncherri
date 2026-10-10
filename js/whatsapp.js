@@ -11,7 +11,7 @@
 
 PM.WhatsApp = (function () {
   // Número real da loja: +55 91 8605-6549
-  var NUMBER = "559186056549";
+  var NUMBER = "5591987446257";
 
   var deliveryType = "retirada";
   var sending = false;

@@ -60,6 +60,36 @@ O cardápio não é mais um array fixo em `products.js` — agora vem do Supabas
 Pra editar produto/preço/estoque por enquanto (antes do painel existir), dá
 pra mexer direto na tabela `products` pelo editor do Supabase.
 
+## Painel administrativo (Fase 5 — passo 4)
+
+Arquivo `admin.html` (+ `css/admin.css` + `js/admin.js`), separado do site
+público e sem link nenhum apontando pra ele. Tem duas abas:
+
+- **Produtos** — tabela editável: nome, categoria, descrição, foto (URL),
+  preço, estoque, disponível e destaque. Preço em branco = "sob consulta";
+  estoque em branco = não controla estoque.
+- **Pedidos** — lista com os itens de cada pedido e um seletor de status
+  (novo → confirmado → em preparo → pronto → entregue → cancelado).
+
+Quem pode entrar é controlado pelo Supabase Auth (login por e-mail/senha),
+não por nada no código — as políticas de RLS já garantem que só um usuário
+autenticado edita produtos ou lê/muda pedidos.
+
+### Login de teste (temporário!)
+
+Criei uma conta só pra você testar o painel agora:
+
+```
+E-mail: teste@pradomoncherri.com
+Senha:  ue1l1fFeOWKhTD
+```
+
+**Troque isso antes de entregar pra proprietária.** O jeito certo: no painel
+do Supabase → Authentication → Users, apague esse usuário de teste e crie um
+novo com o e-mail e senha de verdade dela (ou peça pra ela mesma se
+cadastrar, se preferir não saber a senha). Não reaproveite essa senha
+temporária pra nada.
+
 ## Histórico de pedidos (Fase 5 — passo 3)
 
 Fechar o pedido agora faz duas coisas, nessa ordem:
