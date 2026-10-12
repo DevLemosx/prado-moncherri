@@ -14,6 +14,9 @@ window.PM = window.PM || {};
 
 PM.CATEGORIES = [];
 PM.PRODUCTS = [];
+PM.FLAVORS = []; // sabores do Especial de Fatias (mudam toda semana)
+PM.FLAVORS_ERROR = false; // true se a busca dos sabores falhou e ainda não há lista
+PM.SETTINGS = PM.Store.normalizeSettings(null); // taxa, horários, domingo do especial (padrões até carregar)
 
 // Ícones de linha usados como moldura enquanto um produto não tem foto real
 // (campo "image_url" vazio no banco). Isso é só visual, por isso continua
@@ -39,24 +42,60 @@ PM.findProduct = function (id) {
   return null;
 };
 
+/** Busca um sabor do especial pelo id. */
+PM.findFlavor = function (id) {
+  for (var i = 0; i < PM.FLAVORS.length; i++) {
+    if (PM.FLAVORS[i].id === id) return PM.FLAVORS[i];
+  }
+  return null;
+};
+
 /**
  * Busca categorias e produtos no Supabase e preenche PM.CATEGORIES/PM.PRODUCTS.
  * Retorna uma Promise — chame com `await` antes de iniciar os outros módulos.
  */
 /* SUPABASE_FETCH_START */
 PM.loadCatalog = async function () {
-  var client = window.supabase.createClient(PM.CONFIG.SUPABASE_URL, PM.CONFIG.SUPABASE_ANON_KEY);
-  PM.client = client; // outros módulos (ex: whatsapp.js, no passo 3) vão reusar essa conexão
+  // Na primeira vez cria a conexão; nas atualizações (aba reaberta) reaproveita.
+  var client = PM.client || window.supabase.createClient(PM.CONFIG.SUPABASE_URL, PM.CONFIG.SUPABASE_ANON_KEY);
+  PM.client = client; // whatsapp.js reusa essa conexão pra gravar o pedido
 
-  var catResult = await client.from("categories").select("slug, label").order("sort_order");
+  var results = await Promise.all([
+    client.from("categories").select("slug, label").order("sort_order"),
+    client
+      .from("products")
+      .select("id, name, description, price, image_url, featured, has_flavors, stock_qty, cat:categories(slug)")
+      .eq("available", true)
+      .order("id"),
+    client.from("settings").select("key, value"),
+    client.from("special_flavors").select("id, name, available").order("sort_order").order("id")
+  ]);
+  var catResult = results[0], prodResult = results[1], setResult = results[2], flavResult = results[3];
+
+  // Categorias e produtos são obrigatórios: sem eles não há cardápio.
   if (catResult.error) throw catResult.error;
-
-  var prodResult = await client
-    .from("products")
-    .select("id, name, description, price, image_url, featured, cat:categories(slug)")
-    .eq("available", true)
-    .order("id");
   if (prodResult.error) throw prodResult.error;
+
+  // Configurações e sabores são opcionais: se falharem, o cardápio abre mesmo assim
+  // (com os valores padrão / avisando que os sabores não carregaram).
+  if (setResult.error) {
+    console.warn("Não foi possível carregar as configurações da loja; usando os valores padrão.", setResult.error);
+  } else {
+    var raw = {};
+    setResult.data.forEach(function (r) { raw[r.key] = r.value; });
+    PM.SETTINGS = PM.Store.normalizeSettings(raw);
+  }
+
+  if (flavResult.error) {
+    console.warn("Não foi possível carregar os sabores do especial.", flavResult.error);
+    if (!PM.FLAVORS_LOADED) PM.FLAVORS_ERROR = true; // numa atualização, mantém a lista que já tinha
+  } else {
+    PM.FLAVORS = flavResult.data.map(function (f) {
+      return { id: f.id, name: f.name, available: !!f.available };
+    });
+    PM.FLAVORS_LOADED = true;
+    PM.FLAVORS_ERROR = false;
+  }
 
   PM.CATEGORIES = [{ id: "todos", label: "Todos" }].concat(
     catResult.data.map(function (c) {
@@ -72,7 +111,10 @@ PM.loadCatalog = async function () {
       price: p.price,
       cat: p.cat ? p.cat.slug : null,
       image: p.image_url || undefined,
-      featured: p.featured
+      featured: p.featured,
+      has_flavors: !!p.has_flavors,
+      // null = produto sem controle de estoque; número = quantas unidades restam (0 = esgotado)
+      stock: p.stock_qty == null ? null : Number(p.stock_qty)
     };
   });
 };

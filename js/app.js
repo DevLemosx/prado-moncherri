@@ -1,15 +1,18 @@
 /**
  * app.js
- * Ponto de entrada. A partir da Fase 5, o catálogo não é mais instantâneo
- * (vem de uma chamada de rede ao Supabase), então a ordem importa mais do
- * que antes:
- *   1. WhatsApp.init()  — só liga o formulário, não depende do catálogo
- *   2. loadCatalog()    — busca produtos/categorias (mostra "carregando")
- *   3. Cart.init()      — só agora dá pra resolver os produtos salvos no carrinho
- *   4. Menu.init()      — só agora dá pra desenhar a grade de produtos
+ * Ponto de entrada. O catálogo vem de uma chamada de rede ao Supabase, então
+ * a ordem importa:
+ *   1. WhatsApp.init() e HScroll.init() — só ligam botões, não dependem do catálogo
+ *   2. loadCatalog()  — busca produtos, categorias, configurações e sabores
+ *   3. Cart.init()    — só agora dá pra resolver (e conferir) o carrinho salvo
+ *   4. Menu.init() e Hours.init() — só agora dá pra desenhar cardápio e horários
  */
+
+var REFRESH_AFTER_MS = 5 * 60 * 1000;
+
 document.addEventListener("DOMContentLoaded", async function () {
   PM.WhatsApp.init();
+  PM.HScroll.init();
 
   var grid = document.getElementById("productGrid");
   var feat = document.getElementById("featScroller");
@@ -30,4 +33,26 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   PM.Cart.init();
   PM.Menu.init();
+  PM.Hours.init();
+
+  // Quem deixa a aba aberta por horas (ou volta nela depois) pode estar vendo sabores,
+  // preços ou horários desatualizados. Ao voltar pra aba, recarrega — mas só se já faz um tempo.
+  var lastLoad = Date.now();
+  var refreshing = false;
+  document.addEventListener("visibilitychange", async function () {
+    if (document.hidden || refreshing || Date.now() - lastLoad < REFRESH_AFTER_MS) return;
+    refreshing = true;
+    try {
+      await PM.loadCatalog();
+      lastLoad = Date.now();
+      PM.Cart.prune(); // tira do carrinho o que saiu do ar enquanto a aba estava parada
+      PM.Cart.render();
+      PM.Menu.renderAll();
+      PM.Hours.render();
+    } catch (err) {
+      console.warn("Não foi possível atualizar o cardápio; mantendo o que já está na tela.", err);
+    } finally {
+      refreshing = false;
+    }
+  });
 });

@@ -44,9 +44,13 @@
   <nav class="tabs">
     <button class="tab-btn active" data-tab="produtos">Produtos</button>
     <button class="tab-btn" data-tab="pedidos">Pedidos</button>
+    <button class="tab-btn" data-tab="resumo">Resumo</button>
+    <button class="tab-btn" data-tab="especial">Especial</button>
+    <button class="tab-btn" data-tab="loja">Loja</button>
   </nav>
 
   <section class="tab-panel" id="panelProdutos">
+    <p class="hint" style="margin:0 0 12px;">Estoque: deixe vazio para <strong>não controlar</strong>. Com um número, o site desconta sozinho a cada pedido, mostra "Esgotado" em 0 e devolve se você cancelar o pedido. Só o que você mudar na linha é salvo.</p>
     <div class="table-scroll">
       <table class="products-table">
         <thead>
@@ -68,12 +72,98 @@
   </section>
 
   <section class="tab-panel hidden" id="panelPedidos">
+    <div class="toolbar">
+      <button class="btn btn-ghost btn-sm" id="refreshOrders">Atualizar</button>
+    </div>
     <div class="orders-list" id="ordersList"></div>
+  </section>
+
+  <section class="tab-panel hidden" id="panelResumo">
+    <div class="toolbar">
+      <div class="period-bar" id="periodBar">
+        <button class="period-btn" data-days="1">Hoje</button>
+        <button class="period-btn active" data-days="7">7 dias</button>
+        <button class="period-btn" data-days="30">30 dias</button>
+        <button class="period-btn" data-days="0">Tudo</button>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="refreshSummary">Atualizar</button>
+    </div>
+    <div id="summaryBody"></div>
+  </section>
+
+  <section class="tab-panel hidden" id="panelEspecial">
+    <div class="box">
+      <h3>Abertura do especial</h3>
+      <p class="status-line" id="specialStatus"></p>
+      <label class="check-row"><input type="checkbox" id="sundayToggle"><span id="sundayLabel"></span></label>
+      <p class="hint">Aos sábados o especial abre sozinho. Marque o domingo só nos domingos em que for fazer: depois dele, volta a ficar fechado sozinho.</p>
+      <p class="msg" id="sundayMsg" role="status"></p>
+    </div>
+    <div class="box">
+      <h3>Sabores desta semana</h3>
+      <p class="hint">O cliente escolhe entre estes sabores ao pedir. Desmarque "Disponível" quando um sabor acabar.</p>
+      <ul class="flavor-admin-list" id="flavorList"></ul>
+      <form class="flavor-add" id="flavorAddForm">
+        <input id="flavorNewName" type="text" maxlength="60" placeholder="Novo sabor" aria-label="Nome do novo sabor">
+        <button type="submit" class="btn btn-primary btn-sm">Adicionar sabor</button>
+      </form>
+      <p class="msg" id="flavorMsg" role="status"></p>
+      <button class="btn btn-ghost btn-sm" id="flavorClear">Remover todos os sabores</button>
+    </div>
+  </section>
+
+  <section class="tab-panel hidden" id="panelLoja">
+    <div class="box">
+      <h3>Taxa de entrega</h3>
+      <div class="inline-form">
+        <span>R$</span>
+        <input id="feeInput" type="text" inputmode="decimal" autocomplete="off" aria-label="Taxa de entrega em reais">
+        <button class="btn btn-primary btn-sm" id="feeSave">Salvar</button>
+      </div>
+      <p class="hint">Cobrada nos pedidos com entrega. Use 0 para entrega grátis.</p>
+      <p class="msg" id="feeMsg" role="status"></p>
+    </div>
+    <div class="box">
+      <h3>Pix</h3>
+      <p class="hint" style="margin:0 0 12px;">Aparece para o cliente depois que o pedido é registrado, com o valor já preenchido (Pix copia e cola). Sem chave cadastrada, o Pix fica combinado pelo WhatsApp.</p>
+      <div class="pix-form">
+        <label>Tipo da chave
+          <select id="pixType"></select>
+        </label>
+        <label>Chave Pix
+          <input id="pixKey" type="text" autocomplete="off" placeholder="como está cadastrada no banco">
+        </label>
+        <label>Nome do recebedor
+          <input id="pixName" type="text" maxlength="40" autocomplete="off" placeholder="como está na conta (ex: Prado Moncherri Doceria)">
+        </label>
+        <label>Cidade
+          <input id="pixCity" type="text" maxlength="30" autocomplete="off" placeholder="ex: Paragominas">
+        </label>
+      </div>
+      <div class="inline-actions">
+        <button class="btn btn-primary btn-sm" id="pixSave">Salvar Pix</button>
+        <button class="btn btn-ghost btn-sm" id="pixTest">Gerar código de teste (R$ 1,00)</button>
+        <button class="btn btn-ghost btn-sm" id="pixRemove">Remover Pix</button>
+      </div>
+      <p class="msg" id="pixMsg" role="status"></p>
+      <textarea id="pixTestCode" class="pix-test-code hidden" readonly rows="3" aria-label="Código Pix de teste"></textarea>
+      <p class="hint hidden" id="pixTestHint">Cole este código no app do seu banco (Pix → Copia e Cola) <strong>sem pagar</strong> e confira se aparecem o seu nome e o valor de R$ 1,00. Se aparecer certo, está tudo certo.</p>
+    </div>
+    <div class="box">
+      <h3>Horário de funcionamento</h3>
+      <p class="status-line" id="storeStatus"></p>
+      <div id="hoursEditor"></div>
+      <button class="btn btn-primary btn-sm" id="hoursSave">Salvar horários</button>
+      <p class="msg" id="hoursMsg" role="status"></p>
+    </div>
   </section>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
+<script src="js/store.js"></script>
+<script src="js/pix.js"></script>
+<script src="js/stats.js"></script>
 <script src="js/admin.js"></script>
 </body>
 </html>

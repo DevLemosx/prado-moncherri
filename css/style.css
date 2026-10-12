@@ -30,6 +30,8 @@
   --line: rgba(42,24,38,0.12);
   --accent: var(--gold-600);
   --accent-2: var(--lilac-500);
+  --ok:#2F7A4D;
+  --danger:#B4423A;
 
   --serif: 'Cormorant Garamond', 'Iowan Old Style', serif;
   --sans: 'Outfit', 'Segoe UI', sans-serif;
@@ -48,12 +50,15 @@ html{scroll-behavior:smooth; scroll-padding-top: calc(84px + env(safe-area-inset
     --line:rgba(243,233,238,0.14);
     --accent: var(--gold-300);
     --accent-2: var(--lilac-300);
+    --ok:#6FCF97;
+    --danger:#F28B82;
   }
 }
 :root[data-theme="dark"]{
   --bg:#1B0F19; --surface:#241420; --surface-2:#2E1A2A;
   --text:#F3E9EE; --text-soft:#C7AFC0; --line:rgba(243,233,238,0.14);
   --accent: var(--gold-300); --accent-2: var(--lilac-300);
+  --ok:#6FCF97; --danger:#F28B82;
 }
 
 body{

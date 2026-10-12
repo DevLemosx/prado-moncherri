@@ -82,11 +82,12 @@
     <div class="wrap hero-inner">
       <div class="hero-copy">
         <p class="eyebrow">Doceria artesanal</p>
+        <p class="open-status" data-open-status hidden><span class="dot"></span><span class="txt"></span></p>
         <h1>Doces feitos à mão,<br>pedidos em minutos.</h1>
         <p class="lede">Morangos cravejados, brownies recheados, cakes no pote e bolos por encomenda — monte seu pedido aqui e finalize direto no WhatsApp da loja.</p>
         <div class="hero-actions">
           <a href="#cardapio" class="btn btn-primary">Ver cardápio</a>
-          <a href="#destaques" class="btn btn-ghost">Os queridinhos</a>
+          <a href="#destaques" id="featLink" class="btn btn-ghost hidden">Os queridinhos</a>
         </div>
       </div>
       <div class="hero-mark">
@@ -97,14 +98,16 @@
     </div>
   </section>
 
-  <section id="destaques">
+  <section id="destaques" class="hidden">
     <div class="wrap section-head">
       <div>
         <p class="eyebrow">Mais pedidos</p>
         <h2>Nossos queridinhos</h2>
       </div>
     </div>
-    <div class="scroller" id="featScroller"></div>
+    <div class="wrap">
+      <div class="hscroll"><div class="scroller" id="featScroller" data-hscroll></div></div>
+    </div>
   </section>
 
   <section id="cardapio">
@@ -115,7 +118,7 @@
           <h2>Escolha e monte seu pedido</h2>
         </div>
       </div>
-      <div class="pills" id="pillBar"></div>
+      <div class="hscroll hscroll--pills"><div class="pills" id="pillBar" data-hscroll></div></div>
       <div class="grid" id="productGrid"></div>
     </div>
   </section>
@@ -159,7 +162,8 @@
         <div class="contact-card">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></svg>
           <h3>Horário</h3>
-          <ul class="hours-list">
+          <p class="open-status" data-open-status hidden><span class="dot"></span><span class="txt"></span></p>
+          <ul class="hours-list" id="hoursList">
             <li><span>Seg, ter, qui e sáb</span><span>08:00 – 22:00</span></li>
             <li><span>Qua e sex</span><span>08:00 – 19:00</span></li>
             <li><span>Domingo</span><span>08:00 – 16:00</span></li>
@@ -198,48 +202,119 @@
   </div>
   <div class="drawer-body" id="drawerBody"></div>
   <div class="drawer-foot" id="drawerFoot" style="display:none;">
-    <div class="row-total"><span>Total</span><strong id="drawerTotal">R$ 0,00</strong></div>
+    <div class="row-total"><span>Subtotal</span><strong id="drawerTotal">R$ 0,00</strong></div>
+    <p class="drawer-note">Taxa de entrega e forma de pagamento no próximo passo.</p>
     <button class="btn btn-primary btn-block" id="checkoutBtn">Finalizar pedido</button>
   </div>
 </aside>
 
 <!-- Modal de finalização -->
-<div class="modal" id="checkoutModal">
+<div class="modal" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
   <div class="modal-card">
+    <div id="checkoutForm">
     <div class="drawer-head" style="padding:0 0 14px;">
-      <h3>Finalizar pedido</h3>
-      <button class="close-x" id="closeModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <h3 id="checkoutTitle">Finalizar pedido</h3>
+      <button class="close-x" id="closeModal" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
+
+    <p class="notice hidden" id="closedNotice"></p>
+
     <div class="field">
       <label for="custName">Seu nome</label>
-      <input id="custName" type="text" placeholder="Como podemos te chamar?">
+      <input id="custName" type="text" autocomplete="name" placeholder="Como podemos te chamar?">
     </div>
+
     <div class="field">
-      <label>Forma de recebimento</label>
-      <div class="radio-row">
-        <div class="radio-opt active" data-value="retirada">Retirada</div>
-        <div class="radio-opt" data-value="entrega">Entrega</div>
+      <span class="label-text" id="deliveryLabel">Forma de recebimento</span>
+      <div class="radio-row" role="radiogroup" aria-labelledby="deliveryLabel">
+        <button type="button" class="radio-opt delivery-opt active" role="radio" aria-checked="true" data-delivery="retirada">Retirada</button>
+        <button type="button" class="radio-opt delivery-opt" role="radio" aria-checked="false" data-delivery="entrega">Entrega</button>
       </div>
     </div>
     <div id="deliveryFields" class="hidden">
-      <div class="field"><label for="custAddress">Endereço</label><input id="custAddress" type="text" placeholder="Rua, avenida..."></div>
+      <div class="field"><label for="custAddress">Endereço</label><input id="custAddress" type="text" autocomplete="street-address" placeholder="Rua, avenida..."></div>
       <div class="field"><label for="custNumber">Número</label><input id="custNumber" type="text" placeholder="Nº"></div>
       <div class="field"><label for="custHood">Bairro</label><input id="custHood" type="text" placeholder="Bairro"></div>
     </div>
+
+    <div class="field">
+      <span class="label-text" id="payLabel">Forma de pagamento</span>
+      <div class="radio-row" role="radiogroup" aria-labelledby="payLabel">
+        <button type="button" class="radio-opt pay-opt" role="radio" aria-checked="false" data-pay="dinheiro">Dinheiro</button>
+        <button type="button" class="radio-opt pay-opt" role="radio" aria-checked="false" data-pay="cartao">Cartão</button>
+        <button type="button" class="radio-opt pay-opt" role="radio" aria-checked="false" data-pay="pix">Pix</button>
+      </div>
+    </div>
+    <div class="field hidden" id="cashFields">
+      <label for="custChange">Troco para quanto?</label>
+      <input id="custChange" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex: 50,00">
+      <p class="field-hint">Deixe em branco se não precisar de troco.</p>
+    </div>
+    <div class="field hidden" id="pixNote">
+      <p class="field-hint">O código Pix (copia e cola) aparece assim que o pedido for registrado, com o valor já preenchido.</p>
+    </div>
+    <div class="field hidden" id="cardFields">
+      <span class="label-text" id="cardLabel">Cartão de…</span>
+      <div class="radio-row" role="radiogroup" aria-labelledby="cardLabel">
+        <button type="button" class="radio-opt card-opt" role="radio" aria-checked="false" data-card="credito">Crédito</button>
+        <button type="button" class="radio-opt card-opt" role="radio" aria-checked="false" data-card="debito">Débito</button>
+      </div>
+    </div>
+
     <div class="field">
       <label for="custNotes">Observação</label>
       <textarea id="custNotes" placeholder="Horário de retirada, alguma preferência..."></textarea>
     </div>
+
+    <div class="totals">
+      <div class="row-sub hidden" id="subtotalRow"><span>Subtotal</span><span id="modalSubtotal">R$ 0,00</span></div>
+      <div class="row-sub hidden" id="feeRow"><span>Taxa de entrega</span><span id="modalFee">R$ 0,00</span></div>
+    </div>
     <div class="row-total" style="margin-bottom:14px;"><span>Total do pedido</span><strong id="modalTotal">R$ 0,00</strong></div>
+    <p class="form-error" id="checkoutError" role="alert"></p>
     <button class="btn btn-gold btn-block" id="sendWhatsApp">Enviar pedido pelo WhatsApp</button>
+    </div>
+
+    <div id="checkoutDone" class="hidden">
+      <div class="drawer-head" style="padding:0 0 14px;">
+        <h3>Quase lá!</h3>
+        <button class="close-x" id="doneCloseX" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <p class="done-text" id="doneText"></p>
+
+      <div class="pix-panel hidden" id="pixPanel">
+        <h4>Pagar com Pix</h4>
+        <p class="pix-amount">Valor: <strong id="pixAmount">R$ 0,00</strong></p>
+        <div id="pixConfigured">
+          <p class="field-hint">Chave Pix (<span id="pixKeyType"></span>)</p>
+          <div class="pix-key" id="pixKeyValue"></div>
+          <div class="pix-actions">
+            <button type="button" class="btn btn-ghost btn-sm" id="pixCopyKey">Copiar chave</button>
+            <button type="button" class="btn btn-primary btn-sm" id="pixCopyCode">Copiar Pix copia e cola</button>
+          </div>
+          <p class="field-hint">No app do banco: Pix → Pix Copia e Cola → colar. O valor já vem preenchido. Depois de pagar, envie o comprovante pelo WhatsApp.</p>
+          <textarea id="pixCodeText" class="pix-code" readonly rows="3" aria-label="Código Pix copia e cola"></textarea>
+        </div>
+        <p class="field-hint hidden" id="pixPending">Vamos enviar a chave Pix pelo WhatsApp.</p>
+      </div>
+
+      <a class="btn btn-gold btn-block" id="doneWhatsApp" href="#" target="_blank" rel="noopener">Abrir o WhatsApp</a>
+      <button class="btn btn-ghost btn-block" id="doneClose" style="margin-top:10px;">Fechar</button>
+    </div>
   </div>
 </div>
 
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
+<script src="js/store.js"></script>
+<script src="js/pix.js"></script>
 <script src="js/products.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/menu.js"></script>
+<script src="js/hscroll.js"></script>
+<script src="js/hours.js"></script>
 <script src="js/whatsapp.js"></script>
 <script src="js/app.js"></script>
 </body>
